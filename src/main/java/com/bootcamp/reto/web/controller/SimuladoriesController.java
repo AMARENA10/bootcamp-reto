@@ -36,6 +36,7 @@ public class SimuladoriesController {
       // return new ResponseEntity<>(this.productService.save(productDto), HttpStatus.CREATED);
         return new ResponseEntity<>(this.simuladorService.simulate(simuladorDto), HttpStatus.OK);
 
+
     }
 
 }
