@@ -14,25 +14,19 @@ import java.util.Date;
 @Setter
 @Entity
 @Builder
-@Table(name = "ProductCategory", schema = "SalesLT")
+@Table(name = "Simulador", schema = "dbo")
 public class Simulador {
     @Id
-    @Column(name = "ProductCategoryID")
-    private Integer id;
-    @Column(name = "Dni")
-    private Integer dni;
-    @Column(name = "tipoTarjeta")
-    private String tipotarjeta;
-    @Column(name = "monto")
-    private String monto;
-    @Column(name = "ncoutas")
-    private Integer ncoutas;
-    @Column(name = "tasa")
-    private Double tasa;
-    @Column(name = "FechaPago")
-    private Date fechapago;
-    @Column(name = "rowguid")
-    private String rowguid;
+    @Column(name = "simulador_id")
+    private Integer  simuladorId;
+    @Column(name = "cuota")
+    private Double cuota;
+    @Column(name = "moneda")
+    private String moneda;
+    @Column(name = "primera_cuota")
+    private String primeraCouta;
+    @Column(name = "estado")
+    private String estado;
 
 
 }

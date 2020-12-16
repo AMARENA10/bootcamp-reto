@@ -11,10 +11,10 @@ import java.util.Date;
 @Setter
 public class SimuladorResponse {
 
-    private Double couta;
+    private Integer simuladorId;
+    private Double cuota;
     private String moneda;
-    private Date primeraCouta;
+    private String primeraCouta;
     private String estado;
-
 
 }

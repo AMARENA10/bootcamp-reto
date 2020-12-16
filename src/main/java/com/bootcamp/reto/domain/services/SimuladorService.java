@@ -1,14 +1,14 @@
 package com.bootcamp.reto.domain.services;
 
-import com.bootcamp.reto.domain.dto.SimuladorDto;
+import com.bootcamp.reto.domain.dto.SimuladorRequest;
 import com.bootcamp.reto.domain.dto.SimuladorResponse;
+import com.bootcamp.reto.persistence.entities.Simulador;
 
 import java.util.List;
 
 public interface SimuladorService {
-    SimuladorDto findById(Integer id);
 
-    List<SimuladorDto> findAll();
+    Simulador save(SimuladorResponse simuladorResponse);
 
-    SimuladorResponse simulate(SimuladorDto simuladorDto);
+    SimuladorResponse simulate(SimuladorRequest simuladorRequest);
 }

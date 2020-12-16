@@ -1,22 +1,17 @@
 package com.bootcamp.reto.domain.services.impl;
 
-import com.bootcamp.reto.domain.dto.SimuladorDto;
+import com.bootcamp.reto.domain.dto.SimuladorRequest;
 import com.bootcamp.reto.domain.dto.SimuladorResponse;
-import com.bootcamp.reto.domain.mappers.ClientesMapper;
-import com.bootcamp.reto.domain.mappers.SimuladoriesMapper;
-import com.bootcamp.reto.domain.mappers.TarjetasMapper;
+import com.bootcamp.reto.domain.dto.TeaDto;
+import com.bootcamp.reto.domain.mappers.SimuladorResponseMapper;
 import com.bootcamp.reto.domain.services.SimuladorService;
-import com.bootcamp.reto.persistence.entities.ClienteTarjeta;
-import com.bootcamp.reto.persistence.repositories.ClienteRepository;
-import com.bootcamp.reto.persistence.repositories.ClienteTarjetaRepository;
-import com.bootcamp.reto.persistence.repositories.SimuladorRepository;
-import com.bootcamp.reto.persistence.repositories.TarjetaRepository;
+import com.bootcamp.reto.persistence.entities.Simulador;
+import com.bootcamp.reto.persistence.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SimuladorServiceImpl implements SimuladorService {
@@ -25,57 +20,73 @@ public class SimuladorServiceImpl implements SimuladorService {
     private SimuladorRepository simuladorRepository;
 
     @Autowired
-    private SimuladoriesMapper simuladoriesMapper;
-
-    @Autowired
     private ClienteRepository clienteRepository;
-
-    @Autowired
-    private ClientesMapper clientesMapper;
 
     @Autowired
     private TarjetaRepository tarjetaRepository;
 
     @Autowired
-    private TarjetasMapper tarjetasMapper;
+    private ClienteTarjetaRepository clienteTarjetaRepository;
 
     @Autowired
-    private ClienteTarjetaRepository clienteTarjetaRepository;
+    private TeaRepository teaRepository;
+
+    @Autowired
+    private SimuladorResponseMapper simuladorResponseMapper;
+
+
     @Override
-    public SimuladorDto findById(Integer id) {
-        var category = this.simuladorRepository.findById(id).get();
-        return this.simuladoriesMapper.toSimuladorDto(category);
+    public Simulador save(SimuladorResponse simuladorResponse)
+    {
+        var simuladorSave = this.simuladorResponseMapper.toSimuladorResponse(simuladorResponse);
+
+        return this.simuladorRepository.save(simuladorSave);
     }
 
     @Override
-    public List<SimuladorDto> findAll() {
-        var categories = this.simuladorRepository.findAll();
-        return this.simuladoriesMapper.toSimuladoriesDto(categories);
-    }
+    public SimuladorResponse simulate(SimuladorRequest simuladorRequest) {
 
-    @Override
-    public SimuladorResponse simulate(SimuladorDto simuladorDto) {
         SimuladorResponse simuladorResponse = new SimuladorResponse();
 
-        var cliente = this.clienteRepository.find(simuladorDto.getDni());
+        var cliente = this.clienteRepository.find(simuladorRequest.getDni());
 
         if (cliente != null) {
 
-            var tarjeta= this.tarjetaRepository.find(simuladorDto.getTarjeta());
+            var tarjeta= this.tarjetaRepository.find(simuladorRequest.getTarjeta());
 
             if (tarjeta != null) {
 
                 var clienteTarjeta=this.clienteTarjetaRepository.find(cliente.getId(),tarjeta.getId());
 
+
                 if (clienteTarjeta != null)
                 {
-                    // 1. Hacer calculos
-                    // 2. Registrar tablas
-                    simuladorResponse.setEstado("exitoso");
-                    simuladorResponse.setMoneda(simuladorDto.getMoneda());
-                    simuladorResponse.setCouta(simuladorDto.getMonto()/simuladorDto.getCuota()*1.99);
-                    var fecha = new Date();
-                    simuladorResponse.setPrimeraCouta(fecha);
+                    var tea= this.teaRepository.find(simuladorRequest.getTea());
+
+
+
+                    if(tea != null)
+                    {
+                        long id =this.simuladorRepository.count();
+                        int dato = (int) id;
+                        // 1. Hacer calculos
+                        simuladorResponse.setSimuladorId(dato+1);
+                        simuladorResponse.setEstado("exitoso");
+                        simuladorResponse.setMoneda(simuladorRequest.getMoneda());
+                        simuladorResponse.setCuota((simuladorRequest.getMonto()* (tea.getValor()/100+1))/simuladorRequest.getCuota());
+                        var fecha = new Date();
+                        simuladorResponse.setPrimeraCouta("2021-01-15");
+
+                        // 2. Registrar tablas
+                        save(simuladorResponse);
+
+
+                    }
+                    else
+                    {
+                        simuladorResponse.setEstado("Tea no existe");
+                    }
+
                 } else
                 {
                     simuladorResponse.setEstado("Tarjeta no pertenece al cliente");

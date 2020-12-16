@@ -1,6 +1,6 @@
 package com.bootcamp.reto.web.controller;
 
-import com.bootcamp.reto.domain.dto.SimuladorDto;
+import com.bootcamp.reto.domain.dto.SimuladorRequest;
 import com.bootcamp.reto.domain.dto.SimuladorResponse;
 import com.bootcamp.reto.domain.services.SimuladorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +20,11 @@ public class SimuladoriesController {
     private SimuladoriesController(){
     }
 
-    @GetMapping("")
-    List<SimuladorDto> findAll(){
-        return this.simuladorService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    SimuladorDto findById(@PathVariable("id") Integer id){
-        return this.simuladorService.findById(id);
-    }
-
     @PostMapping("/simulate")
-    ResponseEntity<SimuladorResponse> simulate(@RequestBody() SimuladorDto simuladorDto){
+    ResponseEntity<SimuladorResponse> simulate(@RequestBody() SimuladorRequest simuladorRequest){
         SimuladorResponse simuladorResponse= new SimuladorResponse();
       // return new ResponseEntity<>(this.productService.save(productDto), HttpStatus.CREATED);
-        return new ResponseEntity<>(this.simuladorService.simulate(simuladorDto), HttpStatus.OK);
+        return new ResponseEntity<>(this.simuladorService.simulate(simuladorRequest), HttpStatus.OK);
 
 
     }

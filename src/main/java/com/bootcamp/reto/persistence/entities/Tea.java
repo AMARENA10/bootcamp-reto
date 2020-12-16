@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,15 +13,14 @@ import java.sql.Date;
 @Setter
 @Builder
 @Entity
-@Table(name = "CronogramaPago", schema = "dbo")
-public class Cronograma {
+@Table(name = "Teac", schema = "dbo")
+public class Tea {
     @Id
-    @Column(name = "id_compra")
-    private Integer idCompra;
-    @Column(name = "couta")
-    private Double couta;
-    @Column(name = "fecha_pago")
-    private Date fecha_pago;
-
+    @Column(name = "tea_id")
+    private Integer teaId;
+    @Column(name = "tea")
+    private String tea;
+    @Column(name = "valor")
+    private Double valor;
 
 }

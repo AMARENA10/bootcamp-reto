@@ -1,17 +1,18 @@
 package com.bootcamp.reto.domain.mappers;
 
 import com.bootcamp.reto.domain.dto.ClienteDto;
-import com.bootcamp.reto.domain.dto.CompraDto;
+import com.bootcamp.reto.domain.dto.TeaDto;
 import com.bootcamp.reto.persistence.entities.Cliente;
+import com.bootcamp.reto.persistence.entities.Tea;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ComprasMapper {
+public interface TeasMapper {
 
 
-    CompraDto toCompraDto(Cliente entity);
-    List<CompraDto> totoCompraDto(List<CompraDto> entities);
+    TeaDto toTeaDto(Tea entity);
+    List<TeaDto> toTeaDto(List<TeaDto> entities);
 
 }

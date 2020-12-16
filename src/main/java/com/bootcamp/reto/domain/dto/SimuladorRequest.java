@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SimuladorDto {
+public class SimuladorRequest {
 
 
     private Integer id;
