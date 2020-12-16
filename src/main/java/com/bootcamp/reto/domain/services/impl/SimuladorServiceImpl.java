@@ -10,8 +10,12 @@ import com.bootcamp.reto.persistence.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.UUID;
+
 
 @Service
 public class SimuladorServiceImpl implements SimuladorService {
@@ -67,6 +71,8 @@ public class SimuladorServiceImpl implements SimuladorService {
 
                     if(tea != null)
                     {
+                        LocalDate myDate = LocalDate.now().plusMonths(1);
+                        Date date = Date.from(myDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
                         long id =this.simuladorRepository.count();
                         int dato = (int) id;
                         // 1. Hacer calculos
@@ -74,8 +80,9 @@ public class SimuladorServiceImpl implements SimuladorService {
                         simuladorResponse.setEstado("exitoso");
                         simuladorResponse.setMoneda(simuladorRequest.getMoneda());
                         simuladorResponse.setCuota((simuladorRequest.getMonto()* (tea.getValor()/100+1))/simuladorRequest.getCuota());
-                        var fecha = new Date();
-                        simuladorResponse.setPrimeraCouta("2021-01-15");
+                        //simuladorResponse.setPrimeraCouta("2021-01-15");
+
+                        simuladorResponse.setPrimeraCouta(new SimpleDateFormat("yyyy-MM-dd").format(date));
 
                         // 2. Registrar tablas
                         save(simuladorResponse);
